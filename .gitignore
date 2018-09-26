@@ -1,0 +1,12 @@
+data/
+pretrained/
+mouse/
+__pycache__/
+pth_OTB2015
+OTB2015
+*.ipynb_checkpoints
+*.pyc
+*.swp
+notebooks/*
+.idea
+

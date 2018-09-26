@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Jun 20 17:36:51 2018
-@author: ZK
-"""
+
 import numpy as np
 import math
 import torch
@@ -13,8 +10,7 @@ import os
 from axis import x1y1x2y2_to_xywh, xywh_to_x1y1x2y2, x1y1wh_to_xywh, x1y1wh_to_x1y1x2y2, point_center_crop, resize
 import random
 
-#%%
-data_dir = './OTB2015/'
+data_dir = 'OTB2015/'
 interval = 20
 
 list1 = os.listdir(data_dir)
@@ -28,7 +24,6 @@ sum1 = [0]
 for a in range(len(number)):
     sum1.append(sum1[a]+number[a])
 
-#%%
 class MyDataset(Dataset):
 
     def __init__(self, root_dir, anchor_scale = 64, k = 5):

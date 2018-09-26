@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Jun 27 11:49:42 2018
-@author: ZK
-"""
 import torch
 from torch import nn
 from torch.autograd import Variable as V
 import os
 from axis import SmoothL1Loss
 from axis import Myloss
+from SRPN import SiameseRPN
+#from data import dataloader
+from data_otb import dataloader
+import torch.optim as optim
+from torch.optim import lr_scheduler
+
 #%%
 def train_model(dataloader, model, optimizer, lmbda, scheduler, num_epochs, pth_dir, use_gpu):
-    if not os.path.exists(pth_dir):
-        os.makedirs(pth_dir)
+    os.makedirs(pth_dir,exist_ok=True)
     dirlist = os.listdir(pth_dir)
     if (dirlist):
 #        del dirlist[dirlist.index('record.txt')]
@@ -24,10 +25,8 @@ def train_model(dataloader, model, optimizer, lmbda, scheduler, num_epochs, pth_
         former_epoch = 0
         print('first train begin.')
     for epoch in range(former_epoch+1, num_epochs+1):
-            print('-' * 20)
             print('Epoch {}/{}'.format(epoch, num_epochs))
 
-#        for phase in ['train', 'valid']:
             phase = 'train'
             epoch_loss = 0
             epoch_closs = 0
@@ -167,17 +166,9 @@ def train_model(dataloader, model, optimizer, lmbda, scheduler, num_epochs, pth_
 #                best_model_wts = model_conv.state_dict()
 
             torch.save(model.state_dict(), (pth_dir + 'epoch_%d.pth')% epoch)
-#            print('current model saved to epoch_%d.pth' % epoch)
-    
-#%%
-from SRPN import SiameseRPN
-#from data import dataloader
-from data_otb import dataloader
-import torch.optim as optim
-from torch.optim import lr_scheduler
-#%%
+
 if __name__ == '__main__':
-    
+    pth_dir = './pth_OTB2015/'
     model = SiameseRPN()
     
     params = []
@@ -195,24 +186,6 @@ if __name__ == '__main__':
 #    optimizer = optim.SGD(params, lr=1e-3)
     scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
     
-    train_model(
-            dataloader = dataloader
-            ,
-            model = model
-            , 
-            optimizer = optimizer
-            , 
-#            scheduler = scheduler
-            scheduler = None
-            , 
-            lmbda = 1
-            ,
-            num_epochs = 100
-            , 
-            pth_dir = './pth_OTB2015/'
-            ,
-            use_gpu = True
-            )
-#%%
+    train_model(dataloader = dataloader, model=model,optimizer=optimizer,scheduler = None,lmbda =1,num_epochs = 1000 ,pth_dir = pth_dir,use_gpu = True)
 
 
